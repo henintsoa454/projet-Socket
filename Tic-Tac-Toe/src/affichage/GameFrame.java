@@ -56,7 +56,7 @@ public class GameFrame extends JFrame{
 		this.setAllPlaces(EachPlace.createAllPlace());
 		this.setTitle("Morpion");
 		this.setLayout(new GridLayout(3, 3));
-		this.setSize(600, 600);
+		this.setSize(300, 300);
 		this.setResizable(false);
 		for (int i = 0; i < this.getAllPlaces().size(); i++) {
 			this.getAllPlaces().get(i).addMouseListener(placeListener);
@@ -78,72 +78,74 @@ public class GameFrame extends JFrame{
 	
 	public void checkWinner() {
 		EachPlace[][] allLine = EachPlace.allPlaces(allPlaces);
-		if(allLine[0][0].getId_joueur().isEmpty() && allLine[0][0].getId_joueur() == allLine[1][1].getId_joueur() && allLine[0][0].getId_joueur() == allLine[2][2].getId_joueur()) {
+		if(!allLine[0][0].getId_joueur().equals("") && allLine[0][0].getId_joueur().equals(allLine[1][1].getId_joueur()) && allLine[0][0].getId_joueur().equals(allLine[2][2].getId_joueur())) {
 			winner = allLine[0][0].getId_joueur();
 			this.setState(false);
 		}
-		else if(allLine[0][2].getId_joueur().isEmpty() && allLine[0][2].getId_joueur() == allLine[1][1].getId_joueur() && allLine[0][2].getId_joueur() == allLine[2][0].getId_joueur()) {
+		else if(!allLine[0][2].getId_joueur().equals("") && allLine[0][2].getId_joueur().equals(allLine[1][1].getId_joueur()) && allLine[0][2].getId_joueur().equals(allLine[2][0].getId_joueur())) {
 			winner = allLine[0][2].getId_joueur();
 			this.setState(false);
 		}
-		else if(allLine[0][0].getId_joueur().isEmpty() && allLine[0][0].getId_joueur() == allLine[0][1].getId_joueur() && allLine[0][0].getId_joueur() == allLine[0][2].getId_joueur()) {
+		else if(!allLine[0][0].getId_joueur().equals("") && allLine[0][0].getId_joueur().equals(allLine[0][1].getId_joueur()) && allLine[0][0].getId_joueur().equals(allLine[0][2].getId_joueur())) {
 			winner = allLine[0][0].getId_joueur();
 			this.setState(false);
 		}
-		else if(allLine[1][0].getId_joueur().isEmpty() && allLine[1][0].getId_joueur() == allLine[1][1].getId_joueur() && allLine[1][0].getId_joueur() == allLine[2][1].getId_joueur()) {
+		else if(!allLine[1][0].getId_joueur().equals("") && allLine[1][0].getId_joueur().equals(allLine[1][1].getId_joueur()) && allLine[1][0].getId_joueur().equals(allLine[1][2].getId_joueur())) {
 			winner = allLine[1][0].getId_joueur();
 			this.setState(false);
 		}
-		else if(allLine[2][0].getId_joueur().isEmpty() && allLine[2][0].getId_joueur() == allLine[2][1].getId_joueur() && allLine[2][0].getId_joueur() == allLine[2][2].getId_joueur()) {
+		else if(!allLine[2][0].getId_joueur().equals("") && allLine[2][0].getId_joueur().equals(allLine[2][1].getId_joueur()) && allLine[2][0].getId_joueur().equals(allLine[2][2].getId_joueur())) {
 			winner = allLine[2][0].getId_joueur();
 			this.setState(false);
 		}
-		else if(allLine[0][0].getId_joueur().isEmpty() && allLine[0][0].getId_joueur() == allLine[1][0].getId_joueur() && allLine[0][0].getId_joueur() == allLine[2][0].getId_joueur()) {
+		else if(!allLine[0][0].getId_joueur().equals("") && allLine[0][0].getId_joueur().equals(allLine[1][0].getId_joueur()) && allLine[0][0].getId_joueur().equals(allLine[2][0].getId_joueur())) {
 			winner = allLine[0][0].getId_joueur();
 			this.setState(false);
 		}
-		else if(allLine[0][1].getId_joueur().isEmpty() && allLine[0][1].getId_joueur() == allLine[1][1].getId_joueur() && allLine[0][1].getId_joueur() == allLine[2][1].getId_joueur()) {
+		else if(!allLine[0][1].getId_joueur().equals("") && allLine[0][1].getId_joueur().equals(allLine[1][1].getId_joueur()) && allLine[0][1].getId_joueur().equals(allLine[2][1].getId_joueur())) {
 			winner = allLine[0][1].getId_joueur();
 			this.setState(false);
 		}
-		else if(allLine[0][2].getId_joueur().isEmpty() && allLine[0][2].getId_joueur() == allLine[1][2].getId_joueur() && allLine[0][2].getId_joueur() == allLine[2][2].getId_joueur()) {
+		else if(!allLine[0][2].getId_joueur().equals("") && allLine[0][2].getId_joueur().equals(allLine[1][2].getId_joueur()) && allLine[0][2].getId_joueur().equals(allLine[2][2].getId_joueur())) {
 			winner = allLine[0][2].getId_joueur();
 			this.setState(false);
 		}
 	}
-//	
-//	public void canContinue() {
-//		this.checkWinner();
-//		if(this.isState() == true) {
-//			this.checkPlace();
-//		}
-//	}
-//	
-//	public void reset() {
-//	    this.setWinner(0);
-//	    for (int i = 0; i < this.getAllPlaces().size(); i++) {
-//            this.getAllPlaces().get(i).setBackground(null);
-//            this.getAllPlaces().get(i).setId_joueur(0);
-//            this.setState(true);
-//        }
-//	}
-//	
-//	public void allOperation() {
-//		canContinue();
-//		if(this.isState() == false){
-//			String message = "";
-//			if(this.getWinner() == 0){
-//				message = "Match nul";
-//			}
-//			else{
-//				message = "Victoire du joueur " + this.getWinner();
-//			}
-//			JOptionPane.showMessageDialog(this, message);
-//			reset();
-//		}
-//	}
+	
+	public void canContinue() {
+		this.checkWinner();
+		if(this.isState() == true) {
+			this.checkPlace();
+		}
+	}
+	
+	public void reset() {
+	    this.setWinner("");
+	    for (int i = 0; i < this.getAllPlaces().size(); i++) {
+            this.getAllPlaces().get(i).setBackground(null);
+            this.getAllPlaces().get(i).setId_joueur("");
+            this.setState(true);
+        }
+	}
+	
+	public void allOperation() {
+		canContinue();
+		if(this.isState() == false){
+			String message = "";
+			if(this.getWinner().equalsIgnoreCase("")){
+				message = "Match nul";
+			}
+			else{
+			    if(this.getWinner().equals(this.getPlayer().getId_player()))message = "Victoire";
+			    else message = "Defaite";
+			}
+			JOptionPane.showMessageDialog(this, message);
+			reset();
+		}
+	}
 	
 	public void processMessage(String message) {
+	   System.out.println("traitement");
 	   String[] firstPart = message.split(":");
 	   String id_player = firstPart[0];
 	   String[] secondPart = firstPart[1].split("/");
@@ -155,4 +157,8 @@ public class GameFrame extends JFrame{
 	       if (this.getAllPlaces().get(i).getXpos() == x && this.getAllPlaces().get(i).getYpos() == y) {
 	           Color color = new Color(RGB);
 	           this.getAllPlaces().get(i).setBackground(color);
-	           this.getAllPlaces().get(i).se
+	           this.getAllPlaces().get(i).setId_joueur(id_player);
+	       }
+	   }
+	}
+}

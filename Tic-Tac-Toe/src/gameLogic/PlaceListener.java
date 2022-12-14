@@ -30,9 +30,7 @@ public class PlaceListener implements MouseListener{
 	public void mousePressed(MouseEvent e) {
 		if(e.getSource() instanceof EachPlace) {
 			if(((EachPlace)e.getSource()).getId_joueur().equalsIgnoreCase("") && this.getGameFrame().isState() == true) {
-				this.getGameFrame().getClientthread().sendData(((EachPlace)e.getSource()).getId_joueur()+":"+((EachPlace)e.getSource()).getXpos()+","+((EachPlace)e.getSource()).getYpos());
-//				this.getGameFrame().allOperation();
-//				this.getGameFrame().verifyPlace();
+				this.getGameFrame().getClientthread().sendData(this.getGameFrame().getPlayer().getId_player()+":"+((EachPlace)e.getSource()).getXpos()+","+((EachPlace)e.getSource()).getYpos()+"/"+this.getGameFrame().getPlayer().getColorPlace().getRGB());
 			}
 		}
 		

@@ -16,8 +16,21 @@ public class Server {
 	ArrayList<Socket> players = new ArrayList<Socket>();
 	int playerNumbers = 0;
 	
-	public Server() {
+	String lastPlayer;
+	
+	
+	
+	public String getLastPlayer() {
+        return lastPlayer;
+    }
+
+    public void setLastPlayer(String lastPlayer) {
+        this.lastPlayer = lastPlayer;
+    }
+
+    public Server() {
 		initServer();
+		this.setLastPlayer("");
 	}
 	
 	public void initServer() {
@@ -69,8 +82,7 @@ public class Server {
 	}
 	
 	public void removeClient(int clientIndex) {
-		playerNumbers--;
-		
+		playerNumbers--;		
 		if (players.get(clientIndex) != null) players.remove(clientIndex);
 	}
 	
@@ -99,90 +111,24 @@ public class Server {
 		}
 	}
 	
-	public void processMessage(String message, int clientId) {
-		if (message.startsWith("10") || message.startsWith("11") || message.startsWith("12") || message.startsWith("13")) {
-			// Movement
-			
-			String[] movementPacket = message.split(":");
-			String[] currentPosition = movementPacket[1].split(",");
-			
-			int x = Integer.parseInt(currentPosition[0]);
-			int y = Integer.parseInt(currentPosition[1]);
-			
-			int movementSpeed = Integer.parseInt(movementPacket[2]);
-			
-			if (movementPacket[0].contentEquals("10")) {
-				y -= movementSpeed;
-			}
-			if (movementPacket[0].contentEquals("11")) {
-				y += movementSpeed;
-			}
-			if (movementPacket[0].contentEquals("12")) {
-				x -= movementSpeed;
-			}
-			if (movementPacket[0].contentEquals("13")) {
-				x += movementSpeed;
-			}
-			
-			PrintWriter out;
-			try {
-				out = new PrintWriter(players.get(clientId).getOutputStream());
-				out.println("22:" + x + "," + y);
-				
-				for (int i = 0; i < players.size(); i++) {
-					if (i == clientId) continue;
-					
-					PrintWriter out2 = new PrintWriter(players.get(i).getOutputStream());
-					out2.println("23:" + x + "," + y + ":" + clientId);
-					
-					out2.flush();
-				}
-				
-				out.flush();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		if (message.startsWith("02:")) {
-			String[] packet = message.split(":");
-			int otherPlayerId = Integer.parseInt(packet[1]);
-			
-			try {
-				PrintWriter out = new PrintWriter(players.get(otherPlayerId).getOutputStream());
-				
-				out.println("02:" + packet[2]);
-				
-				out.flush();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		if (message.startsWith("03:")) {
-			System.out.println(message);
-			String[] packet = message.split(":");
-			
-			int otherId = Integer.parseInt(packet[2]);
-				
-				PrintWriter out;
-				try {
-					out = new PrintWriter(players.get(Integer.parseInt(packet[3])).getOutputStream());
-					out.println("04:" + packet[1] + ":" + otherId);
-					out.flush();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				
-			
-		}
-		
-		System.out.println(message + " From " + clientId);
+	public void changeLastPlayer(String message) {
+	    String player = message.split(":")[0];
+	    this.setLastPlayer(player);
 	}
+	
+	public void processMessage(String message) {
+	    if(this.getLastPlayer() == null) {
+	        sendToAllClients(message);	
+	        changeLastPlayer(message); 
+	    }
+	    else {
+            if (!this.getLastPlayer().equals(message.split(":")[0])) {
+                sendToAllClients(message);
+                changeLastPlayer(message);
+            }
+        }
+	    
+    }
 	
 	public static void main(String[] args) {
 		new Server();

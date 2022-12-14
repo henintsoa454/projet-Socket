@@ -39,6 +39,7 @@ public class ClientThread implements Runnable{
 			while(message != null) {
 			    System.out.println(message);
 				gameframe.processMessage(message);
+				gameframe.allOperation();
 				message = in.readLine();
 			}
 			

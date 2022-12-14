@@ -38,14 +38,14 @@ public class ServerThread implements Runnable{
 		try {
 			message = in.readLine();
 			while (message != null) {
-				server.processMessage(message, clientId);
+				server.processMessage(message);
 				message = in.readLine();
 			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			server.removeClient(clientId);
+		    server.removeClient(clientId);
 			try {
 				currentPlayer.close();
 			} catch (IOException e) {
