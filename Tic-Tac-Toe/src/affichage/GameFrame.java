@@ -1,5 +1,6 @@
 package affichage;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.lang.reflect.InaccessibleObjectException;
@@ -15,7 +16,49 @@ public class GameFrame extends JFrame{
 	Player player;
 	ClientThread clientthread;
 	String winner;
-	
+	JLabel winJLabel;
+	JLabel looseJLabel;
+	JLabel drawJLabel;
+	int win;
+    	int loose;
+    	int draw;
+    
+	public int getWin() {
+        return win;
+    }
+    public void setWin(int win) {
+        this.win = win;
+    }
+    public int getLoose() {
+        return loose;
+    }
+    public void setLoose(int loose) {
+        this.loose = loose;
+    }
+    public int getDraw() {
+        return draw;
+    }
+    public void setDraw(int draw) {
+        this.draw = draw;
+    }
+    public JLabel getWinJLabel() {
+        return winJLabel;
+    }
+    public void setWinJLabel(JLabel winJLabel) {
+        this.winJLabel = winJLabel;
+    }
+    public JLabel getLooseJLabel() {
+        return looseJLabel;
+    }
+    public void setLooseJLabel(JLabel looseJLabel) {
+        this.looseJLabel = looseJLabel;
+    }
+    public JLabel getDrawJLabel() {
+        return drawJLabel;
+    }
+    public void setDrawJLabel(JLabel drawJLabel) {
+        this.drawJLabel = drawJLabel;
+    }
     public String getWinner() {
         return winner;
     }
@@ -49,19 +92,36 @@ public class GameFrame extends JFrame{
 	}
 
 	public GameFrame() {
+	    this.setWin(0);
+	    this.setLoose(0);
+	    this.setDraw(0);
+	    PlaceListener placeListener = new PlaceListener(this);
+	    this.setWinJLabel(new JLabel());
+	    this.getWinJLabel().setText("Victoire: " + this.getWin());
+	    this.setLooseJLabel(new JLabel());
+	    this.getLooseJLabel().setText("Defaite: " + this.getLoose());
+	    this.setDrawJLabel(new JLabel());
+	    this.getDrawJLabel().setText("Match nul: " + this.getDraw());
+	    JPanel gamePanel = new JPanel();
+	    this.setAllPlaces(EachPlace.createAllPlace());
+	    gamePanel.setLayout(new GridLayout(3,3));
+	    for (int i = 0; i < this.getAllPlaces().size(); i++) {
+	        this.getAllPlaces().get(i).addMouseListener(placeListener);
+	        gamePanel.add(this.getAllPlaces().get(i));
+	    }
+	    JPanel infoPanel = new JPanel();
+	    infoPanel.add(winJLabel);
+	    infoPanel.add(looseJLabel);
+	    infoPanel.add(drawJLabel);
 	    this.setWinner("");
 	    this.setClientthread(new ClientThread(this));
 		this.setState(true);
-		PlaceListener placeListener = new PlaceListener(this);
-		this.setAllPlaces(EachPlace.createAllPlace());
 		this.setTitle("Morpion");
-		this.setLayout(new GridLayout(3, 3));
-		this.setSize(300, 300);
+		this.setLayout(new BorderLayout());
+		this.setSize(500, 300);
 		this.setResizable(false);
-		for (int i = 0; i < this.getAllPlaces().size(); i++) {
-			this.getAllPlaces().get(i).addMouseListener(placeListener);
-			this.add(this.getAllPlaces().get(i));
-		}
+		this.add(gamePanel,BorderLayout.CENTER);
+		this.add(infoPanel,BorderLayout.EAST);
 		this.addMouseListener(placeListener);
 		this.setVisible(true);
 	}
@@ -69,8 +129,7 @@ public class GameFrame extends JFrame{
 	public void checkPlace() {
 		this.setState(false);
 		for (int i = 0; i < this.getAllPlaces().size(); i++) {
-			if (this.getAllPlaces().get(i).getId_joueur().equalsIgnoreCase("")) {
-				this.setState(true);
+			if (this.getAllPlaces().get(i).getId_joueur().equalsIgnoreCase("")) {				this.setState(true);
 				break;
 			}
 		}
@@ -134,12 +193,22 @@ public class GameFrame extends JFrame{
 			String message = "";
 			if(this.getWinner().equalsIgnoreCase("")){
 				message = "Match nul";
+				this.setDraw(this.getDraw()+1);
 			}
 			else{
-			    if(this.getWinner().equals(this.getPlayer().getId_player()))message = "Victoire";
-			    else message = "Defaite";
+			    if(this.getWinner().equals(this.getPlayer().getId_player())){
+			        message = "Victoire";
+			        this.setWin(this.getWin()+1);
+			    }
+			    else {
+			        message = "Defaite";
+			        this.setLoose(this.getLoose()+1);
+			    } 
 			}
 			JOptionPane.showMessageDialog(this, message);
+			this.getWinJLabel().setText("Victoire: " + this.getWin());
+			this.getLooseJLabel().setText("Defaite: " + this.getLoose());
+			this.getDrawJLabel().setText("Match nul: " + this.getDraw());
 			reset();
 		}
 	}
