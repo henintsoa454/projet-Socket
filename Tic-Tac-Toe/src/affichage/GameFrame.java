@@ -3,7 +3,6 @@ package affichage;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.lang.reflect.InaccessibleObjectException;
 import java.util.Vector;
 import client.*;
 import javax.swing.*;
@@ -129,7 +128,8 @@ public class GameFrame extends JFrame{
 	public void checkPlace() {
 		this.setState(false);
 		for (int i = 0; i < this.getAllPlaces().size(); i++) {
-			if (this.getAllPlaces().get(i).getId_joueur().equalsIgnoreCase("")) {				this.setState(true);
+			if (this.getAllPlaces().get(i).getId_joueur().equalsIgnoreCase("")) {
+				this.setState(true);
 				break;
 			}
 		}
